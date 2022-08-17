@@ -1,0 +1,6 @@
+phpunit.phar
+composer.phar
+*.cache
+.idea/
+vendor/
+coverage/

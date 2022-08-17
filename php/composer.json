@@ -1,0 +1,12 @@
+{
+  "name": "hemit/kata-seed",
+  "description": "Just a little kata",
+  "autoload": {
+    "classmap": [
+      "src/"
+    ]
+  },
+  "require": {
+    "phpunit/phpunit": "9.5.10"
+  }
+}
