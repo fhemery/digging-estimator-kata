@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+<<<<<<< HEAD
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
@@ -49,6 +50,10 @@
       <change beforePath="$PROJECT_DIR$/ts/src/digging-estimator.ts" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/ts/tsconfig.json" beforeDir="false" />
     </list>
+=======
+  <component name="ChangeListManager">
+    <list default="true" id="659e9437-bbb8-46e7-b528-2bf591d3e459" name="Changes" comment="" />
+>>>>>>> origin/Thom_Mir
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -68,6 +73,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+<<<<<<< HEAD
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../currency-conversion-kata-main" />
   </component>
   <component name="RunManager">
@@ -90,6 +96,8 @@
         <item itemvalue="Python tests.Python tests for test_digging_estimator.test_returns_as_doctor_Pockosky_says" />
       </list>
     </recent_temporary>
+=======
+>>>>>>> origin/Thom_Mir
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -102,6 +110,7 @@
     </task>
     <servers />
   </component>
+<<<<<<< HEAD
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
       <map>
@@ -125,4 +134,6 @@
       </map>
     </option>
   </component>
+=======
+>>>>>>> origin/Thom_Mir
 </project>
