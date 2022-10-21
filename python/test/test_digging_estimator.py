@@ -1,9 +1,13 @@
-from src.digging_estimator import DiggingEstimator
+from python.src.digging_estimator import *
+import unittest
+from unittest.mock import MagicMock
 
 
-def test_returns_as_doctor_Pockosky_says():
-    estimator = DiggingEstimator()
+class DiggingEstimatorTest(unittest.TestCase):
 
-    result = estimator.tunnel(28, 2, "granite")
+    def test_returns_as_doctor_Pockosky_says(self):
 
-    assert result.total == 48
+        estimator = DiggingEstimator()
+        estimator.get = MagicMock(return_value=[0, 3, 5.5, 7])
+        result = estimator.tunnel(28, 2, "Granite")
+        assert result.total == 48

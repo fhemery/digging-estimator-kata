@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="659e9437-bbb8-46e7-b528-2bf591d3e459" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dotnet/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dotnet/Kata.Tests/DiggingEstimatorTests.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dotnet/Kata.Tests/Kata.Tests.csproj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dotnet/Kata/DiggingEstimator.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dotnet/Kata/Kata.csproj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dotnet/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dotnet/kata.sln" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/java/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/java/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/java/build.gradle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/java/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/java/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/java/gradlew" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/java/gradlew.bat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/java/settings.gradle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/java/src/main/java/DiggingEstimator.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/java/src/main/java/model/Team.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/java/src/main/java/model/TeamComposition.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/java/src/main/java/model/exceptions/InvalidFormatException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/java/src/main/java/model/exceptions/TunnelTooLongForDelayException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/java/src/test/java/DiggingEstimatorTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/composer.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/composer.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/src/DiggingEstimator.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/src/model/Team.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/src/model/TeamComposition.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/src/model/exceptions/InvalidFormatException.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/src/model/exceptions/TunnelTooLongForDelayException.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/php/tests/DiggingEstimatorTest.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/digging_estimator.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/digging_estimator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/test/test_digging_estimator.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/test/test_digging_estimator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ts/.eslintrc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ts/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ts/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ts/jest.config.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ts/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ts/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ts/src/digging-estimator.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ts/src/digging-estimator.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ts/tsconfig.json" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2GRkkGZTGJmZRup1Ls7xgjbQ2UE" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../currency-conversion-kata-main" />
+  </component>
+  <component name="RunManager">
+    <configuration name="Python tests for test_digging_estimator.test_returns_as_doctor_Pockosky_says" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="digging-estimator-kata" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/python/test" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_digging_estimator.test_returns_as_doctor_Pockosky_says&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python tests.Python tests for test_digging_estimator.test_returns_as_doctor_Pockosky_says" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="659e9437-bbb8-46e7-b528-2bf591d3e459" name="Changes" comment="" />
+      <created>1666358925331</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1666358925331</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="main" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
