@@ -1,12 +1,49 @@
 {
   "root": true,
   "parser": "@typescript-eslint/parser",
-  "plugins": [
-    "@typescript-eslint"
-  ],
+  "plugins": ["@typescript-eslint", "jsdoc"],
+  "rules": {
+    "jsdoc/require-description": 1,
+    "jsdoc/require-returns-description": 0,
+    "jsdoc/match-description": [
+      "error",
+      {
+        "mainDescription": {
+          "message": "Capitalize first word and add dot at the end of JSDoc block descriptions",
+          "match": "[A-Z].*\\."
+        },
+        "tags": {
+          "param": {
+            "message": "Capitalize first word of JSDoc block descriptions",
+            "match": "[A-Z].*"
+          }
+        }
+      }
+    ],
+    "require-jsdoc": [
+      "error",
+      {
+        "require": {
+          "FunctionDeclaration": true,
+          "MethodDefinition": true,
+          "ClassDeclaration": false,
+          "ArrowFunctionExpression": true,
+          "FunctionExpression": true
+        }
+      }
+    ]
+  },
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended"
-  ]
+    "plugin:@typescript-eslint/recommended",
+    "plugin:jsdoc/recommended"
+  ],
+  "settings": {
+    "jsdoc": {
+      "tagNamePreference": {
+        "returns": "return"
+      }
+    }
+  }
 }
