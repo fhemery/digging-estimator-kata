@@ -10,21 +10,24 @@ class InvalidFormatException(Exception):
 
 
 class Team:
-    miners = 0
-    healers = 0
-    smithies = 0
-    lighters = 0
-    inn_keepers = 0
-    guards = 0
-    guard_managers = 0
-    washers = 0
+    def __init__(self):
+        self.miners = 0
+        self.healers = 0
+        self.smithies = 0
+        self.lighters = 0
+        self.inn_keepers = 0
+        self.guards = 0
+        self.guard_managers = 0
+        self.washers = 0
 
 
 class TeamComposition:
-    day_team: Team = Team()
-    night_team: Team = Team()
 
-    total = 0
+    def __init__(self):
+        self.day_team: Team = Team()
+        self.night_team: Team = Team()
+
+        self.total = 0
 
 
 class DiggingEstimator:
