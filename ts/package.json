@@ -4,7 +4,8 @@
   "description": "",
   "main": "main.ts",
   "scripts": {
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "test:watch": "jest --watchAll --coverage"
   },
   "devDependencies": {
     "@types/jest": "^28.1.6",
