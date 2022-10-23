@@ -31,6 +31,7 @@ class TeamComposition:
 
 class DiggingEstimator:
     def tunnel(self, length, days, rock_type):
+
         dig_per_rotation = self.get(rock_type)
         max_dig_per_rotation = dig_per_rotation[len(dig_per_rotation) - 1]
         max_dig_per_day = 2 * max_dig_per_rotation
