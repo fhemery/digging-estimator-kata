@@ -11,3 +11,18 @@ class DiggingEstimatorTest(unittest.TestCase):
         estimator.get = MagicMock(return_value=[0, 3, 5.5, 7])
         result = estimator.tunnel(28, 2, "Granite")
         assert result.total == 48
+
+
+    def test_returns_as_doctor_Pockosky_says(self):
+
+        estimator = DiggingEstimator()
+        estimator.get = MagicMock(return_value=[0, 3, 5.5, 7])
+        result = estimator.tunnel(28, 2, "Granite")
+        assert result.total == 48
+
+    def test_returns_as_doctor_Pockosky_says(self):
+
+        estimator = DiggingEstimator()
+        estimator.get = MagicMock(return_value=[0, 3, 5.5, 7])
+        result = estimator.tunnel(28, 2, "Granite")
+        assert result.total == 48
