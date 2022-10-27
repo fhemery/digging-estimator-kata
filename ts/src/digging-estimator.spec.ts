@@ -1,4 +1,10 @@
-import { DiggingEstimator, InvalidFormatException, Team, TunnelTooLongForDelayException } from "./digging-estimator";
+import {
+  DiggingEstimator,
+  InvalidFormatException,
+  Team,
+  TeamComposition,
+  TunnelTooLongForDelayException
+} from "./digging-estimator";
 import { RockInformationInterface } from "./rock-information.interface";
 
 const ONE_DWARF_DIG_PER_ROTATION = 3;
@@ -53,26 +59,57 @@ describe("digging estimator", () => {
     expect(() => estimator.tunnel(30, 2, GRANITE)).toThrow(new TunnelTooLongForDelayException());
   });
 
-  it(`should request one day miner + according team when there is note more than 3 meters to dig`, function() {
-    const result = estimator.tunnel(ONE_DWARF_DIG_PER_ROTATION * 2, 2, GRANITE);
+  describe(`when there is up to ${ONE_DWARF_DIG_PER_ROTATION} meters to dig`, function() {
+    let result: TeamComposition;
+    beforeEach(() => {
+      const distanceToDig = Math.floor(ONE_DWARF_DIG_PER_ROTATION);
 
-    const expectedDayTeam = createTeam(1, 1, 2, 0, 4, 0, 0, 1);
+      result = estimator.tunnel(distanceToDig * 2, 2, GRANITE);
+    });
 
-    expect(result.dayTeam).toEqual(expectedDayTeam);
+    it("should have a day team with one miner", function() {
+      const expectedDayTeam = createTeam(1, 1, 2, 0, 4, 0, 0, 1);
+      expect(result.dayTeam).toEqual(expectedDayTeam);
+    });
+
+    it("should have the correct total", function() {
+      expect(result.total).toBe(9);
+    });
   });
 
-  it(`should request two day miners + according team for ${TWO_DWARVES_DIG_PER_ROTATION} to dig per day`, function() {
-    const result = estimator.tunnel(Math.floor(TWO_DWARVES_DIG_PER_ROTATION * 3), 3, GRANITE);
+  describe(`when there is up to ${TWO_DWARVES_DIG_PER_ROTATION} meters to dig`, function() {
+    let result: TeamComposition;
+    beforeEach(() => {
+      const distanceToDig = Math.floor(TWO_DWARVES_DIG_PER_ROTATION);
 
-    const expectedDayTeam = createTeam(2, 1, 2, 0, 8, 0, 0, 2);
+      result = estimator.tunnel(distanceToDig * 2, 2, GRANITE);
+    });
 
-    expect(result.dayTeam).toEqual(expectedDayTeam);
+    it("should have a day team with two miners", function() {
+      const expectedDayTeam = createTeam(2, 1, 2, 0, 8, 0, 0, 2);
+      expect(result.dayTeam).toEqual(expectedDayTeam);
+    });
+
+    it("should have the correct total", function() {
+      expect(result.total).toBe(15);
+    });
   });
 
-  it(`should request three day miners + according team for ${THREE_DWARVES_DIG_PER_ROTATION} to dig per day`, function() {
-    const result = estimator.tunnel(Math.floor(THREE_DWARVES_DIG_PER_ROTATION * 3), 3, GRANITE);
+  describe(`when there is up to ${THREE_DWARVES_DIG_PER_ROTATION} meters to dig`, function() {
+    let result: TeamComposition;
+    beforeEach(() => {
+      const distanceToDig = Math.floor(THREE_DWARVES_DIG_PER_ROTATION);
 
-    expect(result.dayTeam).toEqual(MAX_DAY_TEAM);
+      result = estimator.tunnel(distanceToDig * 2, 2, GRANITE);
+    });
+
+    it("should have a day team with three miners", function() {
+      expect(result.dayTeam).toEqual(MAX_DAY_TEAM);
+    });
+
+    it("should have the correct total", function() {
+      expect(result.total).toBe(16);
+    });
   });
 
   it(`should not request any night miner for less than ${THREE_DWARVES_DIG_PER_ROTATION} to dig per day`, function() {
@@ -83,36 +120,68 @@ describe("digging estimator", () => {
     expect(result.nightTeam).toEqual(expectedNightTeam);
   });
 
-  it(`should request one night miner for additional ${ONE_DWARF_DIG_PER_ROTATION} to dig per day`, function() {
-    const distanceToDig = Math.floor(THREE_DWARVES_DIG_PER_ROTATION + ONE_DWARF_DIG_PER_ROTATION);
+  describe(`when there is up to additional ${ONE_DWARF_DIG_PER_ROTATION} to dig per day`, function() {
+    let result: TeamComposition;
+    beforeEach(() => {
+      const distanceToDig = Math.floor(THREE_DWARVES_DIG_PER_ROTATION + ONE_DWARF_DIG_PER_ROTATION);
 
-    const result = estimator.tunnel(distanceToDig, 1, GRANITE);
+      result = estimator.tunnel(distanceToDig, 1, GRANITE);
+    });
+    it("should have max day team", function() {
+      expect(result.dayTeam).toEqual(MAX_DAY_TEAM)
+    });
 
-    const expectedNightTeam = createTeam(1, 1, 2, 2, 8, 3, 1, 2);
+    it("should have a night team with one miner", function() {
+      const expectedNightTeam = createTeam(1, 1, 2, 2, 8, 3, 1, 2);
+      expect(result.nightTeam).toEqual(expectedNightTeam);
+    });
 
-    expect(result.dayTeam).toEqual(MAX_DAY_TEAM)
-    expect(result.nightTeam).toEqual(expectedNightTeam);
+    it("should have the correct total", function() {
+      expect(result.total).toBe(36);
+    });
   });
 
-  it(`should request two night miners for additional ${TWO_DWARVES_DIG_PER_ROTATION} to dig per day`, function() {
-    const distanceToDig = Math.floor(THREE_DWARVES_DIG_PER_ROTATION + TWO_DWARVES_DIG_PER_ROTATION);
+  describe(`when there is up to additional ${TWO_DWARVES_DIG_PER_ROTATION} to dig per day`, function() {
+    let result: TeamComposition;
+    beforeEach(() => {
+      const distanceToDig = Math.floor(THREE_DWARVES_DIG_PER_ROTATION + TWO_DWARVES_DIG_PER_ROTATION);
 
-    const result = estimator.tunnel(distanceToDig, 1, GRANITE);
+      result = estimator.tunnel(distanceToDig, 1, GRANITE);
+    });
+    it("should have max day team", function() {
+      expect(result.dayTeam).toEqual(MAX_DAY_TEAM)
+    });
 
-    const expectedNightTeam = createTeam(2, 1, 2, 3, 8, 4, 2, 3);
+    it("should have a night team with two miners", function() {
+      const expectedNightTeam = createTeam(2, 1, 2, 3, 8, 4, 2, 3);
+      expect(result.nightTeam).toEqual(expectedNightTeam);
+    });
 
-    expect(result.dayTeam).toEqual(MAX_DAY_TEAM)
-    expect(result.nightTeam).toEqual(expectedNightTeam);
+    it("should have the correct total", function() {
+      expect(result.total).toBe(41);
+    });
+
   });
 
-  it(`should request three night miners for additional ${THREE_DWARVES_DIG_PER_ROTATION} to dig per day`, function() {
-    const distanceToDig = Math.floor(THREE_DWARVES_DIG_PER_ROTATION + THREE_DWARVES_DIG_PER_ROTATION);
+  describe(`when there is up to additional ${THREE_DWARVES_DIG_PER_ROTATION} to dig per day`, function() {
+    let result: TeamComposition;
+    beforeEach(() => {
+      const distanceToDig = Math.floor(THREE_DWARVES_DIG_PER_ROTATION + THREE_DWARVES_DIG_PER_ROTATION);
 
-    const result = estimator.tunnel(distanceToDig, 1, GRANITE);
+      result = estimator.tunnel(distanceToDig, 1, GRANITE);
+    });
 
-    const expectedNightTeam = createTeam(3, 1, 2, 4, 12, 5, 2, 3);
+    it("should have max day team", function() {
+      expect(result.dayTeam).toEqual(MAX_DAY_TEAM)
+    });
 
-    expect(result.dayTeam).toEqual(MAX_DAY_TEAM)
-    expect(result.nightTeam).toEqual(expectedNightTeam);
+    it("should have a night team with three miners", function() {
+      const expectedNightTeam = createTeam(3, 1, 2, 4, 12, 5, 2, 3);
+      expect(result.nightTeam).toEqual(expectedNightTeam);
+    });
+
+    it("should have the correct total", function() {
+      expect(result.total).toBe(48);
+    });
   });
 });
