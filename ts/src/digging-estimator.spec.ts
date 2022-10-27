@@ -1,9 +1,13 @@
 import { DiggingEstimator, InvalidFormatException, TunnelTooLongForDelayException } from "./digging-estimator";
 import { RockInformationInterface } from "./rock-information.interface";
 
+const ONE_DWARF_DIG_PER_DAY = 3
+const TWO_DWARVES_DIG_PER_DAY = 5.5
+const THREE_DWARVES_DIG_PER_DAY = 7
+
 export class FakeRockInformationService implements RockInformationInterface {
   get(): number[] {
-    return [0, 3, 5.5, 7];
+    return [0, ONE_DWARF_DIG_PER_DAY, TWO_DWARVES_DIG_PER_DAY, THREE_DWARVES_DIG_PER_DAY];
   }
 }
 const GRANITE = "granite";
@@ -30,5 +34,23 @@ describe("digging estimator", () => {
 
   it("should return exception if tunnel is too long to be dug during delay", function() {
     expect(() => estimator.tunnel(30, 2, GRANITE)).toThrow(new TunnelTooLongForDelayException());
+  });
+
+  it(`should request one day miner when there is note more than 3 meters to dig`, function() {
+    const result = estimator.tunnel(ONE_DWARF_DIG_PER_DAY * 2, 2, GRANITE);
+
+    expect(result.dayTeam.miners).toBe(1);
+  });
+
+  it(`should request two day miners for ${TWO_DWARVES_DIG_PER_DAY} to dig per day`, function() {
+    const result = estimator.tunnel(Math.floor(TWO_DWARVES_DIG_PER_DAY * 3), 3, GRANITE);
+
+    expect(result.dayTeam.miners).toBe(2);
+  });
+
+  it(`should request three day miners for ${THREE_DWARVES_DIG_PER_DAY} to dig per day`, function() {
+    const result = estimator.tunnel(Math.floor(THREE_DWARVES_DIG_PER_DAY * 3), 3, GRANITE);
+
+    expect(result.dayTeam.miners).toBe(3);
   });
 });
