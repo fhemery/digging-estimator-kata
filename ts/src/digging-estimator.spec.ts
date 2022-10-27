@@ -1,10 +1,15 @@
 import { DiggingEstimator } from "./digging-estimator";
+import { RockInformationInterface } from "./rock-information.interface";
+
+export class FakeRockInformationService implements RockInformationInterface {
+  get(): number[] {
+    return [0, 3, 5.5, 7];
+  }
+}
 
 describe("digging estimator", () => {
-
   it("should return as Dr Pockovsky said", () => {
-    // To have it work, you need to go set the rates to [0, 3, 5.5, 7]
-    const estimator = new DiggingEstimator();
+    const estimator = new DiggingEstimator(new FakeRockInformationService());
 
     const result = estimator.tunnel(28, 2, "granite");
 
