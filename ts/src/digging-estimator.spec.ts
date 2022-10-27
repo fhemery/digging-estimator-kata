@@ -55,6 +55,19 @@ describe("digging estimator", () => {
     expect(() => estimator.tunnel(2, 5.01, GRANITE)).toThrow(new InvalidFormatException());
   });
 
+  it("should return empty teams if tunnel has no length", function() {
+    const result = estimator.tunnel(0, 2, GRANITE);
+    const emptyTeam = createTeam();
+
+    expect(result.dayTeam).toEqual(emptyTeam);
+    expect(result.nightTeam).toEqual(emptyTeam);
+    expect(result.total).toBe(0);
+  });
+
+  it("should return empty team if duration is 0", function() {
+    expect(() => estimator.tunnel(10, 0, GRANITE)).toThrow(new Error());
+  });
+
   it("should return exception if tunnel is too long to be dug during delay", function() {
     expect(() => estimator.tunnel(30, 2, GRANITE)).toThrow(new TunnelTooLongForDelayException());
   });
