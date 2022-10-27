@@ -184,4 +184,11 @@ describe("digging estimator", () => {
       expect(result.total).toBe(48);
     });
   });
+
+  describe("when not using the fake implementation for the RockInformationService", function() {
+    it("should fail", function() {
+      const realEstimator = new DiggingEstimator();
+      expect(() => realEstimator.tunnel(2, 1, GRANITE)).toThrow();
+    });
+  });
 });
