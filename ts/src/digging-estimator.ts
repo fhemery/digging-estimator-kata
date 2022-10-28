@@ -22,9 +22,48 @@ export class Team {
   }
 }
 
+export class DayTeam extends Team {
+  compute() {
+    if (this.miners > 0) {
+      this.healers = 1;
+      this.smithies = 2;
+      this.innKeepers = Math.ceil((this.miners + this.healers + this.smithies) / 4) * 4;
+      this.washers = Math.ceil((this.miners + this.healers + this.smithies + this.innKeepers) / 10);
+    }
+  }
+}
+
+export class NightTeam extends Team {
+  compute() {
+    if (this.miners > 0) {
+      this.healers = 1;
+      this.smithies = 2;
+
+      this.lighters = this.miners + 1;
+
+      this.innKeepers = Math.ceil((this.miners + this.healers + this.smithies + this.lighters) / 4) * 4;
+
+      // eslint-disable-next-line no-constant-condition
+      while (true) {
+        const oldWashers = this.washers;
+        const oldGuard = this.guards;
+        const oldGuardManagers = this.guardManagers;
+
+        this.washers = Math.ceil((this.miners + this.healers + this.smithies + this.innKeepers + this.lighters + this.guards + this.guardManagers) / 10);
+        this.guards = Math.ceil((this.healers + this.miners + this.smithies + this.lighters + this.washers) / 3);
+        this.guardManagers = Math.ceil((this.guards) / 3);
+
+        if (oldWashers === this.washers && oldGuard === this.guards && oldGuardManagers === this.guardManagers) {
+          break;
+        }
+      }
+    }
+  }
+}
+
 export class TeamComposition {
-  dayTeam: Team = new Team();
-  nightTeam: Team = new Team();
+  dayTeam: DayTeam = new DayTeam();
+  nightTeam: NightTeam = new NightTeam();
 
   get total(): number {
     return this.dayTeam.total + this.nightTeam.total;
@@ -68,36 +107,8 @@ export class DiggingEstimator {
     }
     const {dayTeam, nightTeam} = composition;
 
-    if (dayTeam.miners > 0) {
-      dayTeam.healers = 1;
-      dayTeam.smithies = 2;
-      dayTeam.innKeepers = Math.ceil((dayTeam.miners + dayTeam.healers + dayTeam.smithies) / 4) * 4;
-      dayTeam.washers = Math.ceil((dayTeam.miners + dayTeam.healers + dayTeam.smithies + dayTeam.innKeepers) / 10);
-    }
-
-    if (nightTeam.miners > 0) {
-      nightTeam.healers = 1;
-      nightTeam.smithies = 2;
-
-      nightTeam.lighters = nightTeam.miners + 1;
-
-      nightTeam.innKeepers = Math.ceil((nightTeam.miners + nightTeam.healers + nightTeam.smithies + nightTeam.lighters) / 4) * 4;
-
-      // eslint-disable-next-line no-constant-condition
-      while (true) {
-        const oldWashers = nightTeam.washers;
-        const oldGuard = nightTeam.guards;
-        const oldGuardManagers = nightTeam.guardManagers;
-
-        nightTeam.washers = Math.ceil((nightTeam.miners + nightTeam.healers + nightTeam.smithies + nightTeam.innKeepers + nightTeam.lighters + nightTeam.guards + nightTeam.guardManagers) / 10);
-        nightTeam.guards = Math.ceil((nightTeam.healers + nightTeam.miners + nightTeam.smithies + nightTeam.lighters + nightTeam.washers) / 3);
-        nightTeam.guardManagers = Math.ceil((nightTeam.guards) / 3);
-
-        if (oldWashers === nightTeam.washers && oldGuard === nightTeam.guards && oldGuardManagers === nightTeam.guardManagers) {
-          break;
-        }
-      }
-    }
+    dayTeam.compute();
+    nightTeam.compute();
 
     return composition;
   }
