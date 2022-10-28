@@ -71,38 +71,31 @@ export class DiggingEstimator {
     if (dayTeam.miners > 0) {
       dayTeam.healers = 1;
       dayTeam.smithies = 2;
-    }
-
-    if (nightTeam.miners > 0) {
-      nightTeam.healers = 1;
-      nightTeam.smithies = 2;
-    }
-
-    if (nightTeam.miners > 0) {
-      nightTeam.lighters = nightTeam.miners + 1;
-    }
-
-    if (dayTeam.miners > 0) {
       dayTeam.innKeepers = Math.ceil((dayTeam.miners + dayTeam.healers + dayTeam.smithies) / 4) * 4;
       dayTeam.washers = Math.ceil((dayTeam.miners + dayTeam.healers + dayTeam.smithies + dayTeam.innKeepers) / 10);
     }
 
     if (nightTeam.miners > 0) {
+      nightTeam.healers = 1;
+      nightTeam.smithies = 2;
+
+      nightTeam.lighters = nightTeam.miners + 1;
+
       nightTeam.innKeepers = Math.ceil((nightTeam.miners + nightTeam.healers + nightTeam.smithies + nightTeam.lighters) / 4) * 4;
-    }
 
-    // eslint-disable-next-line no-constant-condition
-    while (true) {
-      const oldWashers = nightTeam.washers;
-      const oldGuard = nightTeam.guards;
-      const oldGuardManagers = nightTeam.guardManagers;
+      // eslint-disable-next-line no-constant-condition
+      while (true) {
+        const oldWashers = nightTeam.washers;
+        const oldGuard = nightTeam.guards;
+        const oldGuardManagers = nightTeam.guardManagers;
 
-      nightTeam.washers = Math.ceil((nightTeam.miners + nightTeam.healers + nightTeam.smithies + nightTeam.innKeepers + nightTeam.lighters + nightTeam.guards + nightTeam.guardManagers) / 10);
-      nightTeam.guards = Math.ceil((nightTeam.healers + nightTeam.miners + nightTeam.smithies + nightTeam.lighters + nightTeam.washers) / 3);
-      nightTeam.guardManagers = Math.ceil((nightTeam.guards) / 3);
+        nightTeam.washers = Math.ceil((nightTeam.miners + nightTeam.healers + nightTeam.smithies + nightTeam.innKeepers + nightTeam.lighters + nightTeam.guards + nightTeam.guardManagers) / 10);
+        nightTeam.guards = Math.ceil((nightTeam.healers + nightTeam.miners + nightTeam.smithies + nightTeam.lighters + nightTeam.washers) / 3);
+        nightTeam.guardManagers = Math.ceil((nightTeam.guards) / 3);
 
-      if (oldWashers === nightTeam.washers && oldGuard === nightTeam.guards && oldGuardManagers === nightTeam.guardManagers) {
-        break;
+        if (oldWashers === nightTeam.washers && oldGuard === nightTeam.guards && oldGuardManagers === nightTeam.guardManagers) {
+          break;
+        }
       }
     }
 
