@@ -16,13 +16,19 @@ export class Team {
   guards = 0;
   guardManagers = 0;
   washers = 0;
+
+  get total(): number {
+    return this.miners + this.washers +  this.healers  + this.smithies  + this.innKeepers + this.guards + this.guardManagers + this.lighters;
+  }
 }
 
 export class TeamComposition {
   dayTeam: Team = new Team();
   nightTeam: Team = new Team();
 
-  total = 0;
+  get total(): number {
+    return this.dayTeam.total + this.nightTeam.total;
+  }
 }
 
 export class DiggingEstimator {
@@ -100,8 +106,6 @@ export class DiggingEstimator {
       }
     }
 
-    composition.total = dayTeam.miners + dayTeam.washers + dayTeam.healers + dayTeam.smithies + dayTeam.innKeepers +
-      nightTeam.miners + nightTeam.washers +  nightTeam.healers  + nightTeam.smithies  + nightTeam.innKeepers + nightTeam.guards + nightTeam.guardManagers + nightTeam.lighters;
     return composition;
   }
 }
