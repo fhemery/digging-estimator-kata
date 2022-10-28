@@ -23,7 +23,7 @@ export class Team {
 }
 
 export class DayTeam extends Team {
-  compute() {
+  computeOtherDwarves() {
     if (this.miners > 0) {
       this.healers = 1;
       this.smithies = 2;
@@ -34,7 +34,7 @@ export class DayTeam extends Team {
 }
 
 export class NightTeam extends Team {
-  compute() {
+  computeOtherDwarves() {
     if (this.miners > 0) {
       this.healers = 1;
       this.smithies = 2;
@@ -90,26 +90,26 @@ export class DiggingEstimator {
     if (distanceToDigPerDay > maxDigPerDay) {
       throw new TunnelTooLongForDelayException();
     }
-    const composition = new TeamComposition();
 
-    // Miners
-    for (let i = 0; i < digPerRotation.length - 1; ++i) {
-      if (digPerRotation[i] < distanceToDigPerDay) {
-        composition.dayTeam.miners++;
-      }
-    }
-    if (distanceToDigPerDay > maxDigPerRotation) {
-      for (let i = 0; i < digPerRotation.length - 1; ++i) {
-        if (digPerRotation[i] + maxDigPerRotation < distanceToDigPerDay) {
-          composition.nightTeam.miners++;
-        }
-      }
-    }
+    const composition = new TeamComposition();
     const {dayTeam, nightTeam} = composition;
 
-    dayTeam.compute();
-    nightTeam.compute();
+    dayTeam.miners = this.computeMiners(digPerRotation, distanceToDigPerDay);
+    nightTeam.miners = this.computeMiners(digPerRotation, distanceToDigPerDay - maxDigPerRotation);
+
+    dayTeam.computeOtherDwarves();
+    nightTeam.computeOtherDwarves();
 
     return composition;
+  }
+
+  private computeMiners(digPerRotation: number[], distanceToDigPerDay: number) {
+    let miners = 0;
+    for (let i = 0; i < digPerRotation.length - 1; ++i) {
+      if (digPerRotation[i] < distanceToDigPerDay) {
+        miners++;
+      }
+    }
+    return miners;
   }
 }
