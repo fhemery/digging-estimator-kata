@@ -1,6 +1,7 @@
 import { RockInformationInterface } from "./rock-information.interface";
 import { VinRockInformationService } from "./external/vin-rock-information.service";
 
+
 const NB_ROTATIONS_PER_DAY = 2
 
 export class TunnelTooLongForDelayException extends Error {
@@ -9,7 +10,7 @@ export class TunnelTooLongForDelayException extends Error {
 export class InvalidFormatException extends Error {
 }
 
-export class DiggingInfo {
+class DiggingInfo {
   readonly distanceToDigPerDay;
   readonly maxDiggingDistancePerRotation;
   constructor(readonly lengthToDig: number, readonly daysAvailable: number, readonly digPerDwarfPerRotation: number[]) {
@@ -44,7 +45,7 @@ export class Team {
 
 }
 
-export class DayTeam extends Team {
+class DayTeam extends Team {
   static fromDiggingInfo(diggingInfo: DiggingInfo): DayTeam {
     const team = new DayTeam()
     team.miners = team.computeMiners(diggingInfo.digPerDwarfPerRotation, diggingInfo.distanceToDigPerDay);
@@ -62,7 +63,14 @@ export class DayTeam extends Team {
   }
 }
 
-export class NightTeam extends Team {
+class NightTeam extends Team {
+  static fromDiggingInfo(diggingInfo: DiggingInfo): NightTeam {
+    const team = new NightTeam()
+    team.miners = team.computeMiners(diggingInfo.digPerDwarfPerRotation, diggingInfo.distanceToDigPerDay - diggingInfo.maxDiggingDistancePerRotation);
+    team.computeOtherDwarves();
+    return team;
+  }
+
   computeOtherDwarves() {
     if (this.miners > 0) {
       this.healers = 1;
@@ -72,33 +80,23 @@ export class NightTeam extends Team {
 
       this.innKeepers = Math.ceil((this.miners + this.healers + this.smithies + this.lighters) / 4) * 4;
 
-      // eslint-disable-next-line no-constant-condition
-      while (true) {
-        const oldWashers = this.washers;
-        const oldGuard = this.guards;
-        const oldGuardManagers = this.guardManagers;
-
-        this.washers = Math.ceil((this.miners + this.healers + this.smithies + this.innKeepers + this.lighters + this.guards + this.guardManagers) / 10);
-        this.guards = Math.ceil((this.healers + this.miners + this.smithies + this.lighters + this.washers) / 3);
-        this.guardManagers = Math.ceil((this.guards) / 3);
-
-        if (oldWashers === this.washers && oldGuard === this.guards && oldGuardManagers === this.guardManagers) {
-          break;
-        }
-      }
+      this.computeDependantDwarves();
+      this.computeDependantDwarves();
     }
   }
 
-  static fromDiggingInfo(diggingInfo: DiggingInfo): NightTeam {
-    const team = new NightTeam()
-    team.miners = team.computeMiners(diggingInfo.digPerDwarfPerRotation, diggingInfo.distanceToDigPerDay - diggingInfo.maxDiggingDistancePerRotation);
-    team.computeOtherDwarves();
-    return team;
+  private computeDependantDwarves() {
+    let iterationsNeededToStabilizeCount = 2;
+    while (iterationsNeededToStabilizeCount-- > 0) {
+      this.washers = Math.ceil((this.miners + this.healers + this.smithies + this.innKeepers + this.lighters + this.guards + this.guardManagers) / 10);
+      this.guards = Math.ceil((this.healers + this.miners + this.smithies + this.lighters + this.washers) / 3);
+      this.guardManagers = Math.ceil((this.guards) / 3);
+    }
   }
 }
 
 export class TeamComposition {
-  constructor(readonly dayTeam = new DayTeam(), readonly nightTeam = new NightTeam()) {
+  constructor(readonly dayTeam: Team = new DayTeam(), readonly nightTeam: Team = new NightTeam()) {
   }
 
   get total(): number {
@@ -125,11 +123,15 @@ export class DiggingEstimator {
 
     const diggingInfo = new DiggingInfo(length, days, this.rockInformation.get(rockType))
 
+    this.checkTunnelCanBeDugInRequestedTime(diggingInfo);
+
+    return TeamComposition.fromDiggingInfo(diggingInfo);
+  }
+
+  private checkTunnelCanBeDugInRequestedTime(diggingInfo: DiggingInfo) {
     if (diggingInfo.distanceToDigPerDay > NB_ROTATIONS_PER_DAY * diggingInfo.maxDiggingDistancePerRotation) {
       throw new TunnelTooLongForDelayException();
     }
-
-    return TeamComposition.fromDiggingInfo(diggingInfo);
   }
 
   private checkInputs(length: number, days: number) {
