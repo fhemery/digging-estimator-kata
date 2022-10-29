@@ -1,6 +1,8 @@
 import { RockInformationInterface } from "./rock-information.interface";
 import { VinRockInformationService } from "./external/vin-rock-information.service";
 
+const NB_ROTATIONS_PER_DAY = 2
+
 export class TunnelTooLongForDelayException extends Error {
 }
 
@@ -78,16 +80,13 @@ export class DiggingEstimator {
   }
 
   tunnel(length: number, days: number, rockType: string): TeamComposition {
+    this.checkInputs(length, days);
+
     const digPerRotation = this.rockInformation.get(rockType);
-    const maxDigPerRotation = digPerRotation[digPerRotation.length - 1];
-    const maxDigPerDay = 2 * maxDigPerRotation;
-
-    if (Math.floor(length) !== length || Math.floor(days) !== days || length < 0 || days < 0) {
-      throw new InvalidFormatException();
-    }
-
+    const maxDigPerRotation = digPerRotation.at(-1) || 0;
     const distanceToDigPerDay = Math.floor(length / days);
-    if (distanceToDigPerDay > maxDigPerDay) {
+
+    if (distanceToDigPerDay > NB_ROTATIONS_PER_DAY * maxDigPerRotation) {
       throw new TunnelTooLongForDelayException();
     }
 
@@ -101,6 +100,12 @@ export class DiggingEstimator {
     nightTeam.computeOtherDwarves();
 
     return composition;
+  }
+
+  private checkInputs(length: number, days: number) {
+    if (Math.floor(length) !== length || Math.floor(days) !== days || length < 0 || days < 0) {
+      throw new InvalidFormatException();
+    }
   }
 
   private computeMiners(digPerRotation: number[], distanceToDigPerDay: number) {
