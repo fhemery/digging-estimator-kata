@@ -16,7 +16,7 @@ export class NightTeam extends Team {
 
       this.lighters = this.miners + 1;
 
-      this.innKeepers = Math.ceil((this.miners + this.healers + this.smithies + this.lighters) / 4) * 4;
+      this.innKeepers = this.computeInnKeepers();
 
       this.computeDependantDwarves();
       this.computeDependantDwarves();
@@ -26,9 +26,9 @@ export class NightTeam extends Team {
   private computeDependantDwarves() {
     let iterationsNeededToStabilizeCount = 2;
     while (iterationsNeededToStabilizeCount-- > 0) {
-      this.washers = Math.ceil((this.miners + this.healers + this.smithies + this.innKeepers + this.lighters + this.guards + this.guardManagers) / 10);
-      this.guards = Math.ceil((this.healers + this.miners + this.smithies + this.lighters + this.washers) / 3);
-      this.guardManagers = Math.ceil((this.guards) / 3);
+      this.washers = this.computeWashers();
+      this.guards = this.computeGuards();
+      this.guardManagers = this.computeGuardManagers();
     }
   }
 }

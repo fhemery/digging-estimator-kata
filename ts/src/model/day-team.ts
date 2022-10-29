@@ -14,8 +14,8 @@ export class DayTeam extends Team {
     if (this.miners > 0) {
       this.healers = 1;
       this.smithies = 2;
-      this.innKeepers = Math.ceil((this.miners + this.healers + this.smithies + this.protectors) / 4) * 4;
-      this.washers = Math.ceil((this.miners + this.healers + this.smithies + this.innKeepers) / 10);
+      this.innKeepers = this.computeInnKeepers();
+      this.washers = this.computeWashers();
     }
   }
 }

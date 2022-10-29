@@ -28,4 +28,20 @@ export class Team {
   protected computeProtectors(areThereGoblins: boolean): number {
     return areThereGoblins ? NEEDED_PROTECTORS : 0;
   }
+
+  protected computeGuardManagers() {
+    return Math.ceil((this.guards) / 3);
+  }
+
+  protected computeGuards() {
+    return Math.ceil((this.healers + this.miners + this.smithies + this.lighters + this.washers) / 3);
+  }
+
+  protected computeWashers() {
+    return Math.ceil((this.miners + this.healers + this.smithies + this.innKeepers + this.lighters + this.guards + this.guardManagers + this.protectors) / 10);
+  }
+
+  protected computeInnKeepers() {
+    return Math.ceil((this.miners + this.healers + this.smithies + this.lighters + this.protectors) / 4) * 4;
+  }
 }
