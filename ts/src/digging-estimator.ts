@@ -9,6 +9,15 @@ export class TunnelTooLongForDelayException extends Error {
 export class InvalidFormatException extends Error {
 }
 
+export class DiggingInfo {
+  readonly distanceToDigPerDay;
+  readonly maxDiggingDistancePerRotation;
+  constructor(readonly lengthToDig: number, readonly daysAvailable: number, readonly digPerDwarfPerRotation: number[]) {
+    this.distanceToDigPerDay = Math.floor(lengthToDig / daysAvailable);
+    this.maxDiggingDistancePerRotation = digPerDwarfPerRotation.at(-1) || 0;
+  }
+}
+
 export class Team {
   miners = 0;
   healers = 0;
@@ -22,9 +31,27 @@ export class Team {
   get total(): number {
     return this.miners + this.washers +  this.healers  + this.smithies  + this.innKeepers + this.guards + this.guardManagers + this.lighters;
   }
+
+  protected computeMiners(digPerRotation: number[], distanceToDigPerDay: number) {
+    let miners = 0;
+    for (let i = 0; i < digPerRotation.length - 1; ++i) {
+      if (digPerRotation[i] < distanceToDigPerDay) {
+        miners++;
+      }
+    }
+    return miners;
+  }
+
 }
 
 export class DayTeam extends Team {
+  static fromDiggingInfo(diggingInfo: DiggingInfo): DayTeam {
+    const team = new DayTeam()
+    team.miners = team.computeMiners(diggingInfo.digPerDwarfPerRotation, diggingInfo.distanceToDigPerDay);
+    team.computeOtherDwarves();
+    return team;
+  }
+
   computeOtherDwarves() {
     if (this.miners > 0) {
       this.healers = 1;
@@ -61,14 +88,28 @@ export class NightTeam extends Team {
       }
     }
   }
+
+  static fromDiggingInfo(diggingInfo: DiggingInfo): NightTeam {
+    const team = new NightTeam()
+    team.miners = team.computeMiners(diggingInfo.digPerDwarfPerRotation, diggingInfo.distanceToDigPerDay - diggingInfo.maxDiggingDistancePerRotation);
+    team.computeOtherDwarves();
+    return team;
+  }
 }
 
 export class TeamComposition {
-  dayTeam: DayTeam = new DayTeam();
-  nightTeam: NightTeam = new NightTeam();
+  constructor(readonly dayTeam = new DayTeam(), readonly nightTeam = new NightTeam()) {
+  }
 
   get total(): number {
     return this.dayTeam.total + this.nightTeam.total;
+  }
+
+  static fromDiggingInfo(diggingInfo: DiggingInfo): TeamComposition {
+    const dayTeam = DayTeam.fromDiggingInfo(diggingInfo);
+    const nightTeam = NightTeam.fromDiggingInfo(diggingInfo);
+
+    return new TeamComposition(dayTeam, nightTeam);
   }
 }
 
@@ -82,39 +123,18 @@ export class DiggingEstimator {
   tunnel(length: number, days: number, rockType: string): TeamComposition {
     this.checkInputs(length, days);
 
-    const digPerRotation = this.rockInformation.get(rockType);
-    const maxDigPerRotation = digPerRotation.at(-1) || 0;
-    const distanceToDigPerDay = Math.floor(length / days);
+    const diggingInfo = new DiggingInfo(length, days, this.rockInformation.get(rockType))
 
-    if (distanceToDigPerDay > NB_ROTATIONS_PER_DAY * maxDigPerRotation) {
+    if (diggingInfo.distanceToDigPerDay > NB_ROTATIONS_PER_DAY * diggingInfo.maxDiggingDistancePerRotation) {
       throw new TunnelTooLongForDelayException();
     }
 
-    const composition = new TeamComposition();
-    const {dayTeam, nightTeam} = composition;
-
-    dayTeam.miners = this.computeMiners(digPerRotation, distanceToDigPerDay);
-    nightTeam.miners = this.computeMiners(digPerRotation, distanceToDigPerDay - maxDigPerRotation);
-
-    dayTeam.computeOtherDwarves();
-    nightTeam.computeOtherDwarves();
-
-    return composition;
+    return TeamComposition.fromDiggingInfo(diggingInfo);
   }
 
   private checkInputs(length: number, days: number) {
     if (Math.floor(length) !== length || Math.floor(days) !== days || length < 0 || days < 0) {
       throw new InvalidFormatException();
     }
-  }
-
-  private computeMiners(digPerRotation: number[], distanceToDigPerDay: number) {
-    let miners = 0;
-    for (let i = 0; i < digPerRotation.length - 1; ++i) {
-      if (digPerRotation[i] < distanceToDigPerDay) {
-        miners++;
-      }
-    }
-    return miners;
   }
 }
