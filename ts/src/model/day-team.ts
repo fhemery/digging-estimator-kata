@@ -5,6 +5,7 @@ export class DayTeam extends Team {
   static fromDiggingInfo(diggingInfo: DiggingInfo): DayTeam {
     const team = new DayTeam();
     team.miners = team.computeMiners(diggingInfo.digPerDwarfPerRotation, diggingInfo.distanceToDigPerDay);
+    team.protectors = team.computeProtectors(diggingInfo.areThereGoblins);
     team.computeOtherDwarves();
     return team;
   }

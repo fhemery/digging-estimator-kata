@@ -6,6 +6,7 @@ import {
   TunnelTooLongForDelayException
 } from "./digging-estimator";
 import { RockInformationInterface } from "./rock-information.interface";
+import { GoblinInformationService } from "./goblin-information-service.interface";
 
 const ONE_DWARF_DIG_PER_ROTATION = 3;
 const TWO_DWARVES_DIG_PER_ROTATION = 5.5;
@@ -35,11 +36,25 @@ export class FakeRockInformationService implements RockInformationInterface {
 
 const GRANITE = "granite";
 
+class FakeGoblinInformationService implements GoblinInformationService {
+  private areThereGoblins = false;
+
+  checkForGoblins() {
+    return this.areThereGoblins;
+  }
+
+  setGoblinPresence(areThereGoblins: boolean) {
+    this.areThereGoblins = areThereGoblins;
+  }
+}
+
 describe("digging estimator", () => {
   let estimator: DiggingEstimator;
+  let fakeGoblinInformationService: FakeGoblinInformationService
 
   beforeEach(() => {
-    estimator = new DiggingEstimator(new FakeRockInformationService());
+    fakeGoblinInformationService = new FakeGoblinInformationService();
+    estimator = new DiggingEstimator(new FakeRockInformationService(), fakeGoblinInformationService);
   });
 
   it("should return as Dr Pockovsky said", () => {
@@ -195,6 +210,18 @@ describe("digging estimator", () => {
 
     it("should have the correct total", function() {
       expect(result.total).toBe(48);
+    });
+
+    describe("when there are goblins in the area", function() {
+      beforeEach(() => {
+        fakeGoblinInformationService.setGoblinPresence(true);
+      })
+
+      it('should add 2 protectors to day team', () => {
+        const result = estimator.tunnel(ONE_DWARF_DIG_PER_ROTATION, 1, "granite", "Moria");
+
+        expect(result.dayTeam.protectors).toBe(2);
+      })
     });
   });
 
