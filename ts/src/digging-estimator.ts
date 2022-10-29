@@ -1,5 +1,10 @@
 import { RockInformationInterface } from "./rock-information.interface";
 import { VinRockInformationService } from "./external/vin-rock-information.service";
+import { DiggingInfo } from "./model/digging-info";
+import { TeamComposition } from "./model/team-composition";
+
+export { Team } from "./model/team";
+export { TeamComposition } from "./model/team-composition";
 
 
 const NB_ROTATIONS_PER_DAY = 2
@@ -8,107 +13,6 @@ export class TunnelTooLongForDelayException extends Error {
 }
 
 export class InvalidFormatException extends Error {
-}
-
-class DiggingInfo {
-  readonly distanceToDigPerDay;
-  readonly maxDiggingDistancePerRotation;
-  constructor(readonly lengthToDig: number, readonly daysAvailable: number, readonly digPerDwarfPerRotation: number[]) {
-    this.distanceToDigPerDay = Math.floor(lengthToDig / daysAvailable);
-    this.maxDiggingDistancePerRotation = digPerDwarfPerRotation.at(-1) || 0;
-  }
-}
-
-export class Team {
-  miners = 0;
-  healers = 0;
-  smithies = 0;
-  lighters = 0;
-  innKeepers = 0;
-  guards = 0;
-  guardManagers = 0;
-  washers = 0;
-
-  get total(): number {
-    return this.miners + this.washers +  this.healers  + this.smithies  + this.innKeepers + this.guards + this.guardManagers + this.lighters;
-  }
-
-  protected computeMiners(digPerRotation: number[], distanceToDigPerDay: number) {
-    let miners = 0;
-    for (let i = 0; i < digPerRotation.length - 1; ++i) {
-      if (digPerRotation[i] < distanceToDigPerDay) {
-        miners++;
-      }
-    }
-    return miners;
-  }
-
-}
-
-class DayTeam extends Team {
-  static fromDiggingInfo(diggingInfo: DiggingInfo): DayTeam {
-    const team = new DayTeam()
-    team.miners = team.computeMiners(diggingInfo.digPerDwarfPerRotation, diggingInfo.distanceToDigPerDay);
-    team.computeOtherDwarves();
-    return team;
-  }
-
-  computeOtherDwarves() {
-    if (this.miners > 0) {
-      this.healers = 1;
-      this.smithies = 2;
-      this.innKeepers = Math.ceil((this.miners + this.healers + this.smithies) / 4) * 4;
-      this.washers = Math.ceil((this.miners + this.healers + this.smithies + this.innKeepers) / 10);
-    }
-  }
-}
-
-class NightTeam extends Team {
-  static fromDiggingInfo(diggingInfo: DiggingInfo): NightTeam {
-    const team = new NightTeam()
-    team.miners = team.computeMiners(diggingInfo.digPerDwarfPerRotation, diggingInfo.distanceToDigPerDay - diggingInfo.maxDiggingDistancePerRotation);
-    team.computeOtherDwarves();
-    return team;
-  }
-
-  computeOtherDwarves() {
-    if (this.miners > 0) {
-      this.healers = 1;
-      this.smithies = 2;
-
-      this.lighters = this.miners + 1;
-
-      this.innKeepers = Math.ceil((this.miners + this.healers + this.smithies + this.lighters) / 4) * 4;
-
-      this.computeDependantDwarves();
-      this.computeDependantDwarves();
-    }
-  }
-
-  private computeDependantDwarves() {
-    let iterationsNeededToStabilizeCount = 2;
-    while (iterationsNeededToStabilizeCount-- > 0) {
-      this.washers = Math.ceil((this.miners + this.healers + this.smithies + this.innKeepers + this.lighters + this.guards + this.guardManagers) / 10);
-      this.guards = Math.ceil((this.healers + this.miners + this.smithies + this.lighters + this.washers) / 3);
-      this.guardManagers = Math.ceil((this.guards) / 3);
-    }
-  }
-}
-
-export class TeamComposition {
-  constructor(readonly dayTeam: Team = new DayTeam(), readonly nightTeam: Team = new NightTeam()) {
-  }
-
-  get total(): number {
-    return this.dayTeam.total + this.nightTeam.total;
-  }
-
-  static fromDiggingInfo(diggingInfo: DiggingInfo): TeamComposition {
-    const dayTeam = DayTeam.fromDiggingInfo(diggingInfo);
-    const nightTeam = NightTeam.fromDiggingInfo(diggingInfo);
-
-    return new TeamComposition(dayTeam, nightTeam);
-  }
 }
 
 export class DiggingEstimator {
