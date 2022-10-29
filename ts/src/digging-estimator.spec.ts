@@ -222,6 +222,24 @@ describe("digging estimator", () => {
 
         expect(result.dayTeam.protectors).toBe(2);
       })
+
+      it('should add innkeepers for protectors if needed protectors to team composition total as well', () => {
+        const result = estimator.tunnel(ONE_DWARF_DIG_PER_ROTATION, 1, "granite", "Moria");
+
+        expect(result.dayTeam.innKeepers).toBe(8);
+      })
+
+      it('should add washers if innkeepers or protectors increase requests one', () => {
+        const result = estimator.tunnel(ONE_DWARF_DIG_PER_ROTATION, 1, "granite", "Moria");
+
+        expect(result.dayTeam.washers).toBe(2);
+      })
+
+      it('should add 2 protectors to team composition total as well', () => {
+        const result = estimator.tunnel(ONE_DWARF_DIG_PER_ROTATION, 1, "granite", "Moria");
+
+        expect(result.total).toBe(16);
+      })
     });
   });
 

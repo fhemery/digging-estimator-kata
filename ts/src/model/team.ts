@@ -12,7 +12,7 @@ export class Team {
   protectors = 0;
 
   get total(): number {
-    return this.miners + this.washers + this.healers + this.smithies + this.innKeepers + this.guards + this.guardManagers + this.lighters;
+    return this.miners + this.washers + this.healers + this.smithies + this.innKeepers + this.guards + this.guardManagers + this.lighters + this.protectors;
   }
 
   protected computeMiners(digPerRotation: number[], distanceToDigPerDay: number) {
