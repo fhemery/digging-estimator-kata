@@ -271,7 +271,7 @@ describe("digging estimator", () => {
       expect(result.nightTeam.washers).toBe(4);
     });
 
-    it('should impact the total for the night team', function() {
+    it("should impact the total for the night team", function() {
       const result = estimator.tunnel(THREE_DWARVES_DIG_PER_ROTATION + THREE_DWARVES_DIG_PER_ROTATION, 1, GRANITE, "Moria");
       const expectedDayTeam = createTeam(3,1,2,0,8,0,0,2,2);
       const expectedNightTeam = createTeam(3,1,2,6,16,6,2,4,2);
@@ -280,7 +280,7 @@ describe("digging estimator", () => {
 
       expect(result).toEqual(new TeamComposition(expectedDayTeam, expectedNightTeam))
       expect(result.total).toBe(expectedDayTeamSize + expectedNightTeamSize);
-    })
+    });
   });
 
   describe("when not using the fake implementation for the RockInformationService", function() {
