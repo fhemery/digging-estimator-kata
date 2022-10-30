@@ -50,7 +50,7 @@ class FakeGoblinInformationService implements GoblinInformationService {
 
 describe("digging estimator", () => {
   let estimator: DiggingEstimator;
-  let fakeGoblinInformationService: FakeGoblinInformationService
+  let fakeGoblinInformationService: FakeGoblinInformationService;
 
   beforeEach(() => {
     fakeGoblinInformationService = new FakeGoblinInformationService();
@@ -156,7 +156,7 @@ describe("digging estimator", () => {
       result = estimator.tunnel(distanceToDig, 1, GRANITE);
     });
     it("should have max day team", function() {
-      expect(result.dayTeam).toEqual(MAX_DAY_TEAM)
+      expect(result.dayTeam).toEqual(MAX_DAY_TEAM);
     });
 
     it("should have a night team with one miner", function() {
@@ -177,7 +177,7 @@ describe("digging estimator", () => {
       result = estimator.tunnel(distanceToDig, 1, GRANITE);
     });
     it("should have max day team", function() {
-      expect(result.dayTeam).toEqual(MAX_DAY_TEAM)
+      expect(result.dayTeam).toEqual(MAX_DAY_TEAM);
     });
 
     it("should have a night team with two miners", function() {
@@ -200,7 +200,7 @@ describe("digging estimator", () => {
     });
 
     it("should have max day team", function() {
-      expect(result.dayTeam).toEqual(MAX_DAY_TEAM)
+      expect(result.dayTeam).toEqual(MAX_DAY_TEAM);
     });
 
     it("should have a night team with three miners", function() {
@@ -212,35 +212,62 @@ describe("digging estimator", () => {
       expect(result.total).toBe(48);
     });
 
-    describe("when there are goblins in the area", function() {
-      beforeEach(() => {
-        fakeGoblinInformationService.setGoblinPresence(true);
-      })
+  });
 
-      it('should add 2 protectors to day team', () => {
-        const result = estimator.tunnel(ONE_DWARF_DIG_PER_ROTATION, 1, "granite", "Moria");
-
-        expect(result.dayTeam.protectors).toBe(2);
-      })
-
-      it('should add innkeepers for protectors if needed protectors to team composition total as well', () => {
-        const result = estimator.tunnel(ONE_DWARF_DIG_PER_ROTATION, 1, "granite", "Moria");
-
-        expect(result.dayTeam.innKeepers).toBe(8);
-      })
-
-      it('should add washers if innkeepers or protectors increase requests one', () => {
-        const result = estimator.tunnel(ONE_DWARF_DIG_PER_ROTATION, 1, "granite", "Moria");
-
-        expect(result.dayTeam.washers).toBe(2);
-      })
-
-      it('should add 2 protectors to team composition total as well', () => {
-        const result = estimator.tunnel(ONE_DWARF_DIG_PER_ROTATION, 1, "granite", "Moria");
-
-        expect(result.total).toBe(16);
-      })
+  describe("when there are goblins in the area", function() {
+    beforeEach(() => {
+      fakeGoblinInformationService.setGoblinPresence(true);
     });
+
+    it("should add 2 protectors to day team", () => {
+      const result = estimator.tunnel(ONE_DWARF_DIG_PER_ROTATION, 1, GRANITE, "Moria");
+
+      expect(result.dayTeam.protectors).toBe(2);
+    });
+
+    it("should add innkeepers for protectors if needed protectors to team composition total as well", () => {
+      const result = estimator.tunnel(ONE_DWARF_DIG_PER_ROTATION, 1, GRANITE, "Moria");
+
+      expect(result.dayTeam.innKeepers).toBe(8);
+    });
+
+    it("should add washers if innkeepers or protectors increase requests one", () => {
+      const result = estimator.tunnel(ONE_DWARF_DIG_PER_ROTATION, 1, GRANITE, "Moria");
+
+      expect(result.dayTeam.washers).toBe(2);
+    });
+
+    it("should add 2 protectors to team composition total as well", () => {
+      const result = estimator.tunnel(ONE_DWARF_DIG_PER_ROTATION, 1, GRANITE, "Moria");
+
+      expect(result.total).toBe(16);
+    });
+
+    it("should add two protectors to night Team", function() {
+      const result = estimator.tunnel(THREE_DWARVES_DIG_PER_ROTATION + ONE_DWARF_DIG_PER_ROTATION, 1, GRANITE, "Moria");
+
+      expect(result.nightTeam.protectors).toBe(2);
+    });
+
+    it('should impact the number of innkeepers for the night team', function() {
+      const result = estimator.tunnel(Math.floor(THREE_DWARVES_DIG_PER_ROTATION + TWO_DWARVES_DIG_PER_ROTATION), 1, GRANITE, "Moria");
+
+      expect(result.nightTeam.innKeepers).toBe(12);
+    });
+
+    it('should impact the number of washers for the night team', function() {
+      const result = estimator.tunnel(THREE_DWARVES_DIG_PER_ROTATION + THREE_DWARVES_DIG_PER_ROTATION, 1, GRANITE, "Moria");
+
+      expect(result.nightTeam.washers).toBe(4);
+    });
+
+    it('should impact the total for the night team', function() {
+      const result = estimator.tunnel(THREE_DWARVES_DIG_PER_ROTATION + THREE_DWARVES_DIG_PER_ROTATION, 1, GRANITE, "Moria");
+      const expectedDayTeamSize = 18;
+      const expectedNightTeamSize = 35;
+
+      expect(result.total).toBe(expectedDayTeamSize + expectedNightTeamSize);
+    })
   });
 
   describe("when not using the fake implementation for the RockInformationService", function() {

@@ -26,7 +26,7 @@ export class Team {
   }
 
   protected computeProtectors(areThereGoblins: boolean): number {
-    return areThereGoblins ? NEEDED_PROTECTORS : 0;
+    return areThereGoblins && this.miners > 0 ? NEEDED_PROTECTORS : 0;
   }
 
   protected computeGuardManagers() {
