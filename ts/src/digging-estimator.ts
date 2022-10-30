@@ -3,7 +3,7 @@ import { VinRockInformationService } from "./external/vin-rock-information.servi
 import { DiggingInfo } from "./model/digging-info";
 import { TeamComposition } from "./model/team-composition";
 import { GoblinInformationService } from "./goblin-information-service.interface";
-import { VinGoblinInformationService } from "./external/vin-goblin-information-service";
+import { VinGoblinInformationService } from "./external/vin-goblin-information.service";
 
 export { Team } from "./model/team";
 export { TeamComposition } from "./model/team-composition";
