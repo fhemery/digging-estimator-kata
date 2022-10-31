@@ -15,7 +15,7 @@ export class NightTeam extends Team {
       this.healers = 1;
       this.smithies = 2;
 
-      this.lighters = this.miners + 1;
+      this.lighters = this.miners + this.protectors + 1;
 
       this.innKeepers = this.computeInnKeepers();
 

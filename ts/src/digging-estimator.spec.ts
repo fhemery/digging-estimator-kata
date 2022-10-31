@@ -14,7 +14,7 @@ const THREE_DWARVES_DIG_PER_ROTATION = 7;
 
 const MAX_DAY_TEAM = createTeam(3, 1, 2, 0, 8, 0, 0, 2);
 
-function createTeam(miners = 0, healers = 0, smithies = 0, lighters = 0, innKeepers = 0, guards = 0, guardManagers = 0, washers = 0): Team {
+function createTeam(miners = 0, healers = 0, smithies = 0, lighters = 0, innKeepers = 0, guards = 0, guardManagers = 0, washers = 0, protectors=0): Team {
   const team = new Team();
   team.miners = miners;
   team.healers = healers;
@@ -24,6 +24,7 @@ function createTeam(miners = 0, healers = 0, smithies = 0, lighters = 0, innKeep
   team.guards = guards;
   team.guardManagers = guardManagers;
   team.washers = washers;
+  team.protectors = protectors
 
   return team;
 }
@@ -249,6 +250,15 @@ describe("digging estimator", () => {
       expect(result.nightTeam.protectors).toBe(2);
     });
 
+    it("should add two lighters for the two protectors", function() {
+      const result = estimator.tunnel(THREE_DWARVES_DIG_PER_ROTATION + ONE_DWARF_DIG_PER_ROTATION, 1, GRANITE, "Moria");
+
+      const lightersNeededForMiners = 1;
+      const lightersNeededForRestOfCamp = 1;
+      const lightersNeededForProtectors = 2;
+      expect(result.nightTeam.lighters).toBe(lightersNeededForMiners + lightersNeededForProtectors + lightersNeededForRestOfCamp);
+    });
+
     it('should impact the number of innkeepers for the night team', function() {
       const result = estimator.tunnel(Math.floor(THREE_DWARVES_DIG_PER_ROTATION + TWO_DWARVES_DIG_PER_ROTATION), 1, GRANITE, "Moria");
 
@@ -263,9 +273,12 @@ describe("digging estimator", () => {
 
     it('should impact the total for the night team', function() {
       const result = estimator.tunnel(THREE_DWARVES_DIG_PER_ROTATION + THREE_DWARVES_DIG_PER_ROTATION, 1, GRANITE, "Moria");
+      const expectedDayTeam = createTeam(3,1,2,0,8,0,0,2,2);
+      const expectedNightTeam = createTeam(3,1,2,6,16,6,2,4,2);
       const expectedDayTeamSize = 18;
-      const expectedNightTeamSize = 35;
+      const expectedNightTeamSize = 42;
 
+      expect(result).toEqual(new TeamComposition(expectedDayTeam, expectedNightTeam))
       expect(result.total).toBe(expectedDayTeamSize + expectedNightTeamSize);
     })
   });
