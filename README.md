@@ -1,3 +1,8 @@
+# Note
+
+Cette branche contient la solution en Typescript. Vous pouvez trouver le détail menant à la solution dans une série de posts
+[sur mon blog](https://blog.hemit.fr/2022/11/01/le-kata-digging-estimator-part-1-le-probleme/)
+
 # Combien faut-il de nains...
 
 ... pour creuser un tunnel de 28 mètres dans du granite en 2 jours ?
